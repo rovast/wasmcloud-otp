@@ -1,6 +1,8 @@
 <script>
    // Custom function that can be called to create a CoreUI tooltip
    var createTooltip = (element) => {
+      if (!element) return
+
       if (window.TooltipCreate === undefined) {
          setTimeout(() => createTooltip(element), 200)
       } else if (element.dataset.toggle = "tooltip") {
@@ -18,8 +20,9 @@
             <div class="col-xl-6 col-lg-12 col-md-12">
                <div class="card">
                   <div class="card-header justify-content-between">
-                     <div class="row justify-content-between">
+                     <div class="row justify-content-between align-items-center">
                         <div class="col-lg-2 col-md-3 col-sm-3" style="max-width:250px">
+                           <div class="card-head-title"></div>
                            <h3><strong>Actors</strong></h3>
                         </div>
                         <div class="mfe-2">
@@ -85,7 +88,7 @@
             <div class="col-xl-6 col-lg-12 col-md-12">
                <div class="card">
                   <div class="card-header">
-                     <div class="row justify-content-between">
+                     <div class="row justify-content-between align-items-center">
                         <div class="col-lg-2 col-md-3 col-sm-3" style="max-width:250px">
                            <h3><strong>Providers</strong></h3>
                         </div>
@@ -151,7 +154,7 @@
             <div class="col-xl-6 col-lg-12 col-md-12">
                <div class="card">
                   <div class="card-header">
-                     <div class="row justify-content-between">
+                     <div class="row justify-content-between align-items-center">
                         <div class="col-lg-6 col-md-6 col-sm-6" style="max-width:300px">
                            <h3><strong>Link Definitions</strong></h3>
                         </div>
@@ -195,12 +198,12 @@
             <div class="col-xl-6 col-lg-12 col-md-12">
                <div class="card">
                   <div class="card-header">
-                     <div class="row justify-content-between">
+                     <div class="row justify-content-between align-items-center">
                         <div class="col-lg-6 col-md-6 col-sm-6" style="max-width:250px">
                            <h3><strong>Host Info</strong></h3>
                         </div>
                         <div class="dropdown d-inline-block">
-                           <button class="btn btn-light dropdown-toggle" id="dropdownHostMenuButton" type="button"
+                           <button class="btn btn-secondary dropdown-toggle" id="dropdownHostMenuButton" type="button"
                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Select Host
                               <span class="badge badge-pill badge-primary"><%= @hosts |> Enum.count() %></span>

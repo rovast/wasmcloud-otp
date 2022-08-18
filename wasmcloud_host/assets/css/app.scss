@@ -1,6 +1,9 @@
 /* This file is for your main application css. */
 @import "./coreui/style.min.css";
 
+// override css for MSP UI
+@import "./msp.css";
+
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,

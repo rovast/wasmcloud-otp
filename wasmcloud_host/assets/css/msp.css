@@ -1,0 +1,85 @@
+button:not(.close) {
+    font-size: 12px !important;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+h3 {
+    font-size: 14px !important;
+    color: #333;
+    font-weight: normal;
+}
+
+table {
+    font-size: 12px;
+}
+
+table thead {
+    background: #fafafa;
+}
+
+table thead th {
+    padding: 10px !important;
+}
+
+table tbody td {
+    padding: 10px 8px !important;
+}
+
+.table-bordered thead td,
+.table-bordered thead th {
+    border-bottom-width: 1px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background: none !important;
+}
+
+.btn-secondary {
+    font-size: 12px !important;
+    background-color: transparent !important;
+}
+
+.btn-secondary:hover {
+    color: #46a6ff !important;
+    background-color: #fff !important;
+    border-color: #46a6ff !important;
+}
+
+.btn-primary:hover {
+    background-color: #46a6ff !important;
+    border-color: #46a6ff !important;
+}
+
+.show>.btn-secondary.dropdown-toggle:focus,
+.btn-secondary.focus,
+.btn-secondary:focus,
+.btn-primary.focus,
+.btn-primary:focus {
+    box-shadow: none !important;
+}
+
+.btn-primary,
+.badge-primary {
+    color: #fff !important;
+    font-size: 12px !important;
+    border-color: #1890ff !important;
+    background-color: #1890ff !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active,
+.dropdown-item:focus,
+.dropdown-item:hover {
+    color: #fff;
+    background-color: #1890ff !important;
+    border-color: #1890ff !important;
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(24 144 255 / 20%);
+    border-color: #40a9ff;
+}

@@ -49,6 +49,7 @@ esbuild:
 	mix assets.deploy
 	cp -r assets/static/* priv/static/
 	cp -r assets/css/coreui priv/static/assets/coreui
+	cp -r assets/css/msp.css priv/static/assets/msp.css
 
 build: deps ## Build wasmcloud_host for development
 	mix compile
