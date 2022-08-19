@@ -42,8 +42,29 @@ defmodule WasmcloudHostWeb.ActorController do
     json(conn, %{
       code: 1001,
       msg: "ok",
-      data: list
-      |> List.flatten
+      data: list |> List.flatten
     })
+  end
+
+  def from_file(conn, %{"actor" => actor, "count" => count} = _params) do
+    error_msg =
+      case File.read(actor.path) do
+        {:ok, bytes} ->
+          HostCore.Actors.ActorSupervisor.start_actor(bytes, "", String.to_integer(count))
+
+        {:error, reason} ->
+          {:error, "Error #{reason}"}
+      end
+
+    case error_msg do
+      nil ->
+        json(conn, %{code: 1002, msg: "Please select a file", data: nil})
+
+      {:ok, _pids} ->
+        json(conn, %{code: 1001, msg: "Success", data: nil})
+
+      {:error, msg} ->
+        json(conn, %{code: 1002, msg: msg, data: nil})
+    end
   end
 end
