@@ -39,14 +39,10 @@ defmodule WasmcloudHostWeb.ActorController do
         end)
       end)
 
-    json(conn, %{
-      code: 1001,
-      msg: "ok",
-      data: list |> List.flatten()
-    })
+    resp_success(conn, list |> List.flatten)
   end
 
-  def create_actor(conn, %{"actor" => actor, "count" => count} = _params) do
+  def create_actor_from_file(conn, %{"actor" => actor, "count" => count} = _params) do
     error_msg =
       case File.read(actor.path) do
         {:ok, bytes} ->
@@ -58,30 +54,81 @@ defmodule WasmcloudHostWeb.ActorController do
 
     case error_msg do
       nil ->
-        json(conn, %{code: 1002, msg: "Please select a file", data: nil})
+        resp_error(conn, "Please select a file")
 
       {:ok, _pids} ->
-        json(conn, %{code: 1001, msg: "Success", data: nil})
+        resp_success(conn)
 
       {:error, msg} ->
-        json(conn, %{code: 1002, msg: msg, data: nil})
+        resp_error(conn, msg)
     end
   end
 
-  def update_actor(conn, %{"path" => path, "count" => count} = _prams) do
+  def update_actor_from_file(conn, %{"path" => path, "count" => count} = _prams) do
     case WasmcloudHost.ActorWatcher.hotwatch_actor(
            :actor_watcher,
            path,
            String.to_integer(count)
          ) do
       :ok ->
-        json(conn, %{code: "1001", msg: nil, data: nil})
+        resp_success(conn)
 
       {:error, msg} ->
-        json(conn, %{code: "1002", msg: msg, data: nil})
+        resp_error(conn, msg)
 
       msg ->
-        json(conn, %{code: "1002", msg: msg, data: nil})
+        resp_error(conn, msg)
     end
+  end
+
+  def create_actor_from_oci(
+        conn,
+        %{"count" => count, "actor_ociref" => actor_ociref, "host_id" => host_id} = _params
+      ) do
+    case host_id do
+      "" ->
+        case WasmcloudHost.Lattice.ControlInterface.auction_actor(actor_ociref, %{}) do
+          {:ok, auction_host_id} ->
+            start_actor(actor_ociref, count, auction_host_id, conn)
+
+          {:error, error} ->
+            resp_error(conn, error)
+        end
+
+      host_id ->
+        start_actor(actor_ociref, count, host_id, conn)
+    end
+  end
+
+  defp start_actor(actor_ociref, count, host_id, conn) do
+    actor_id =
+      WasmcloudHost.Lattice.StateMonitor.get_ocirefs()
+      |> Enum.find({actor_ociref, ""}, fn {oci, _id} -> oci == actor_ociref end)
+      |> elem(1)
+
+    case WasmcloudHost.Lattice.ControlInterface.scale_actor(
+           actor_id,
+           actor_ociref,
+           String.to_integer(count),
+           host_id
+         ) do
+      :ok ->
+        resp_success(conn)
+
+      {:error, error} ->
+        resp_error(conn, error)
+    end
+  end
+
+  defp resp_success(conn) do
+    json(conn, %{code: "1001", msg: "ok", data: nil})
+  end
+
+  defp resp_success(conn, data) do
+    json(conn, %{code: "1001", msg: "ok", data: data})
+  end
+
+  defp resp_error(conn, msg) do
+    json(conn, %{code: "1002", msg: msg, data: nil})
   end
 end

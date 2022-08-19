@@ -34,8 +34,9 @@ defmodule WasmcloudHostWeb.Router do
     get "/livez", ProbeController, :live
 
     get "/actors", ActorController, :list
-    post "/actors/file", ActorController, :create_actor
-    put "/actors/file", ActorController, :update_actor
+    post "/actors/file", ActorController, :create_actor_from_file
+    put "/actors/file", ActorController, :update_actor_from_file
+    post "/actors/oci", ActorController, :create_actor_from_oci
 
     get "/providers", ProviderController, :list
   end
