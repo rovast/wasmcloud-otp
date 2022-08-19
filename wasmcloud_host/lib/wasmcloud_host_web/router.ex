@@ -32,5 +32,7 @@ defmodule WasmcloudHostWeb.Router do
 
     get "/readyz", ProbeController, :ready
     get "/livez", ProbeController, :live
+
+    get "/actors", ActorController, :list
   end
 end
