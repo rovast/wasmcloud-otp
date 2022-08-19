@@ -34,5 +34,6 @@ defmodule WasmcloudHostWeb.Router do
     get "/livez", ProbeController, :live
 
     get "/actors", ActorController, :list
+    get "/providers", ProviderController, :list
   end
 end
