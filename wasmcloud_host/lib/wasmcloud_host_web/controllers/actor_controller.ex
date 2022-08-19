@@ -42,11 +42,11 @@ defmodule WasmcloudHostWeb.ActorController do
     json(conn, %{
       code: 1001,
       msg: "ok",
-      data: list |> List.flatten
+      data: list |> List.flatten()
     })
   end
 
-  def from_file(conn, %{"actor" => actor, "count" => count} = _params) do
+  def create_actor(conn, %{"actor" => actor, "count" => count} = _params) do
     error_msg =
       case File.read(actor.path) do
         {:ok, bytes} ->
@@ -65,6 +65,23 @@ defmodule WasmcloudHostWeb.ActorController do
 
       {:error, msg} ->
         json(conn, %{code: 1002, msg: msg, data: nil})
+    end
+  end
+
+  def update_actor(conn, %{"path" => path, "count" => count} = _prams) do
+    case WasmcloudHost.ActorWatcher.hotwatch_actor(
+           :actor_watcher,
+           path,
+           String.to_integer(count)
+         ) do
+      :ok ->
+        json(conn, %{code: "1001", msg: nil, data: nil})
+
+      {:error, msg} ->
+        json(conn, %{code: "1002", msg: msg, data: nil})
+
+      msg ->
+        json(conn, %{code: "1002", msg: msg, data: nil})
     end
   end
 end
