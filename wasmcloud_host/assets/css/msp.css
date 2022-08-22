@@ -1,3 +1,7 @@
+body {
+    background: #f0f2f5 !important;
+}
+
 button:not(.close) {
     font-size: 12px !important;
 }

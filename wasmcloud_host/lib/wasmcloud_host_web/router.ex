@@ -18,6 +18,7 @@ defmodule WasmcloudHostWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/wasmcloud", PageLive, :index
   end
 
   scope "/metrics", WasmcloudHostWeb do
